@@ -1,6 +1,14 @@
-version: '4.6'
+version: '3.4'
 services:
-  rasa:
+
+  duckling-server:
+    image: rasa/duckling:latest
+    ports:
+    - 8000:8000
+    networks:
+    - all
+
+  rasa-server:
     image: rasa-bot:latest
     working_dir: /app
     build: "./"
@@ -8,17 +16,15 @@ services:
     volumes:
     - ./actions:/app/actions
     - ./data:/app/data
-    - ./models:/app/models
     command: bash -c "rm -rf models/* && rasa train && rasa run --enable-api --cors \"*\" --debug"
     ports:
     - '5005:5005'
+    public: true
     networks:
     - all
 
-
-
   rasa-actions-server:
-    image: rasa-bot:latest
+    image: rasa-bot:latestś
     working_dir: /app
     build: "./"
     restart: always
@@ -30,9 +36,8 @@ services:
     networks:
     - all
 
-
-  networks:
+networks:
   all:
     driver: bridge
     driver_opts:
-      com.docker.network.enable_ipv6: "true"
+      com.docker.network.enable_ipv6: "true"ś
